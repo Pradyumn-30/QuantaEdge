@@ -1,8 +1,14 @@
-# Quantization of YOLOv8m for Real-Time ADAS on Edge Silicon
+# Quantization of YOLOv8m for Real-Time ADAS on Apple Silicon Edge
 
-## Achieving 138 FPS on Edge Silicon with <0.5% Spatial Precision Loss
+## Achieving 138 FPS on Apple Silicon with <0.5% Spatial Precision Loss
 
-In the context of Autonomous Driving (AD), latency is a safety-critical metric. A model running at 20 FPS at highway speeds (100 km/h) travels 1.4 meters between frames. QuantaEdge reduces this "blind spot" to 20 centimeters by optimizing YOLOv8m for the Apple Neural Engine (ANE), achieving a 6.3x speedup (22 FPS → 138 FPS) with a negligible mAP drop on the industry-standard nuScenes dataset.
+In the context of Autonomous Driving (AD), latency is a safety-critical metric. A model running at 20 FPS at highway speeds (100 km/h) travels 1.4 meters between frames. QuantaEdge reduces this latency to 20 centimeters by optimizing YOLOv8m for the Apple Neural Engine (ANE), achieving a 6.3x speedup (22 FPS → 138 FPS) with a negligible mAP drop on the industry-standard nuScenes dataset.
+
+NOTE: ANE is Nueral Processing Unit (NPU) on Apple Silicon (M series). They are equivalent to CUDA Cores, Tensor Cores on an NVIDIA GPU.
+
+Edge Device: Apple Silicon M4 SoC
+
+Processing Unit: ANE
 
 ## Impact on Autonomous Driving
 
@@ -61,5 +67,6 @@ Quantization success is measured by the **Delta (Δ) mAP**. Using the `nuScene
 
 - **Quantization:** Bespoke weight manipulation in PyTorch using distribution analysis (Kurtosis & Entropy).
 - **Export:** ONNX Opset 18
-- **Conversion:** CoreML for ANE
+- **Conversion:** CoreML format for Apple Silicon (TensorRT format is used for NVIDIA GPUs)
 - **Evaluation:** `torchmetrics` integrated with `nuscenes-devkit` for industry-standard validation.
+
