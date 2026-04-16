@@ -6,7 +6,7 @@ In the context of Autonomous Driving (AD), latency is a safety-critical metric. 
 
 ## Impact on Autonomous Driving
 
-High-frequency inference (138 FPS) allows for:
+High-frequency inference (138 FPS and 7ms latency) allows for:
 
 1. **Lower Time-to-Collision (TTC) Error:** More frequent inputs for planning algorithms.
 2. **Redundancy:** Capacity to run multi-camera fused stacks on a single edge chip.
