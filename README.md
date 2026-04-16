@@ -4,7 +4,7 @@
 
 In the context of Autonomous Driving (AD), latency is a safety-critical metric. A model running at 20 FPS at highway speeds (100 km/h) travels 1.4 meters between frames. QuantaEdge reduces this latency to 20 centimeters by optimizing YOLOv8m for the Apple Neural Engine (ANE), achieving a 6.3x speedup (22 FPS → 138 FPS) with a negligible mAP drop on the industry-standard nuScenes dataset.
 
-NOTE: ANE is Nueral Processing Unit (NPU) on Apple Silicon (M series). They are equivalent to CUDA Cores, Tensor Cores on an NVIDIA GPU.
+NOTE: ANE is Neural Processing Unit (NPU) on Apple Silicon (M series). They are equivalent to CUDA Cores, Tensor Cores on an NVIDIA GPU.
 
 Edge Device: Apple Silicon M4 SoC
 
