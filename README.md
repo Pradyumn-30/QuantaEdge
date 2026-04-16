@@ -34,12 +34,12 @@ Standard "Global" INT8 quantization typically fails for object detection because
 Instead of a blunt global quantization, I implemented a **surgical strategy** that applies mathematical optimizations tailored to each functional unit:
 
 
-| Architecture Component       | Quantization Strategy | Technical Justification                                                                                 |
-| ---------------------------- | --------------------- | ------------------------------------------------------------------------------------------------------- |
-| **Backbone**                 | **Min-Max**           | Standard linear rounding for uniform feature extraction layers.                                         |
-| **Neck**                     | **0.01% Clipping**    | Preserving high resolution of 99.99% weights in this critical layer.                                    |
-| **Head**                     | **KL-Divergence**     | Using entropy-based optimization to preserve class probability distributions.                           |
-| **DFL Layer (Generates BB)** | NiL                   | Keeping Distribution Focal Loss in FP32 to maintain spatial precision and prevent bounding box jitters. |
+| Architecture Component                    | Quantization Strategy    | Technical Justification                                                                                 |
+| ----------------------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------- |
+| **Backbone**                              | **Min-Max**              | Standard linear rounding for uniform feature extraction layers.                                         |
+| **Neck**                                  | **0.01% Clipping**       | Preserving high resolution of 99.99% weights in this critical layer.                                    |
+| **Head**                                  | **KL-Divergence**        | Using entropy-based optimization to preserve class probability distributions.                           |
+| **DFL Layer (Bounding Box Localization)** | **Bypass / FP32 Shield** | Keeping Distribution Focal Loss in FP32 to maintain spatial precision and prevent bounding box jitters. |
 
 
 ## Performance Ladder (A/B Testing)
@@ -47,11 +47,11 @@ Instead of a blunt global quantization, I implemented a **surgical strategy** 
 Validation was performed on the 100 **nuScenes** validation set (v1.0-mini)
 
 
-| Stage                                   | Hardware                      | Precision | Latency     | FPS       | Δ vs Baseline |
-| --------------------------------------- | ----------------------------- | --------- | ----------- | --------- | ------------- |
-| **Baseline**                            | GPU (MPS)                     | FP32      | 45.67 ms    | 21.9      | -             |
-| **Step 1**                              | GPU (MPS)                     | **INT8**  | 25.50 ms    | 39.2      | **1.8x**      |
-| **Step 2 (Optimized for Silicon Edge)** | **Apple Nueral Engine (ANU)** | **INT8**  | **7.23 ms** | **138.4** | **6.3x**      |
+| Stage                                            | Hardware                      | Precision | Latency     | FPS       | Δ vs Baseline |
+| ------------------------------------------------ | ----------------------------- | --------- | ----------- | --------- | ------------- |
+| **Baseline**                                     | GPU (MPS)                     | FP32      | 45.67 ms    | 21.9      | -             |
+| **Step 1 (Quantized)**                           | GPU (MPS)                     | **INT8**  | 25.50 ms    | 39.2      | **1.8x**      |
+| **Step 2 (Quantized + Apple Silicon Optimized)** | **Apple Nueral Engine (ANE)** | **INT8**  | **7.23 ms** | **138.4** | **6.3x**      |
 
 
 ## Accuracy & Safety Validation (nuScenes)
@@ -63,10 +63,10 @@ Quantization success is measured by the **Delta (Δ) mAP**. Using the `nuScene
 
 **Key Insight:** The ultra-low drop in mAP@.50:.95 proves that the **DFL FP32 Shield** successfully maintained spatial precision, ensuring that bounding boxes remain locked to object edges even at high speeds.
 
-## Technical Implementation
+## Deployment Pipeline
 
-- **Quantization:** Bespoke weight manipulation in PyTorch using distribution analysis (Kurtosis & Entropy).
-- **Export:** ONNX Opset 18
-- **Conversion:** CoreML format for Apple Silicon (TensorRT format is used for NVIDIA GPUs)
-- **Evaluation:** `torchmetrics` integrated with `nuscenes-devkit` for industry-standard validation.
+- **Framework:** PyTorch (Quantization logic implementation).
+- **Export Path A (NVIDIA):** **ONNX Opset 18** (Targeting TensorRT for high-performance GPU deployment).
+- **Export Path B (Apple Silicon):** **CoreML** (Direct conversion for the M4 Neural Engine - ANE).
+- **Evaluation:** `torchmetrics` + `nuscenes-devkit` integration.
 
