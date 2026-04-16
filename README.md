@@ -13,7 +13,8 @@ High-frequency inference (138 FPS and 7ms latency) allows for:
 3. **Thermal Efficiency:** The ANE consumes significantly less power than the GPU.
 
 ## Pre and Post Quantization
-![night image](images/night-image.png)
+
+night image
 
 ## The Problem: The Outlier Effect
 
@@ -62,4 +63,3 @@ Quantization success is measured by the **Delta (Δ) mAP**. Using the `nuScene
 - **Export:** ONNX Opset 18
 - **Conversion:** CoreML for ANE
 - **Evaluation:** `torchmetrics` integrated with `nuscenes-devkit` for industry-standard validation.
-
