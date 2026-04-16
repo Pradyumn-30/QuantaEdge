@@ -20,7 +20,7 @@ High-frequency inference (138 FPS and 7ms latency) allows for:
 
 ## Pre and Post Quantization
 
-night image
+![Alt Text](images/night-image.png)
 
 ## The Problem: The Outlier Effect
 
